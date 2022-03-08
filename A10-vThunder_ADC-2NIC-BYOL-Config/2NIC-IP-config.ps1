@@ -1,3 +1,4 @@
+Start-Sleep -Seconds 300
 Write-Host "2NIC-IP-Config"
 
 # Get input from user
