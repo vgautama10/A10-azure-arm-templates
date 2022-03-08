@@ -2,10 +2,16 @@ Write-Host "2NIC-IP-Config"
 
 # Get input from user
 param(
-    [string] [Parameter(Mandatory=$true)] $hostIPAddress,
+    [string] [Parameter(Mandatory=$true)] $hostIPName,
     [string] [Parameter(Mandatory=$true)] $ethPrivateIPAddress,
-    [string] [Parameter(Mandatory=$true)] $slbServerHost
+    [string] [Parameter(Mandatory=$true)] $slbServerHost,
+    [string] [Parameter(Mandatory=$true)] $resourceGroupName
   )
+
+# Get vThunder IP Address
+$responseIP = Get-AzPublicIpAddress -Name hostIPName -ResourceGroupName resourceGroupName | ConvertTo-Json
+$responseIP = $response | ConvertFrom-Json
+$hostIPAddress = $responseIP.IpAddress
 
 Write-Host "vThunder Host: " + $hostIPAddress
 # # Connect to Azure portal
