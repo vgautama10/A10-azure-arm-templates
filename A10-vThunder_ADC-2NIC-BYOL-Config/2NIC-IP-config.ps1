@@ -1,20 +1,24 @@
-Start-Sleep -Seconds 300
+Start-Sleep -Seconds 600
 Write-Host "2NIC-IP-Config"
 
-# Get input from user
-param(
-    [string] [Parameter(Mandatory=$true)] $hostIPName,
-    [string] [Parameter(Mandatory=$true)] $ethPrivateIPAddress,
-    [string] [Parameter(Mandatory=$true)] $slbServerHost,
-    [string] [Parameter(Mandatory=$true)] $resourceGroupName
-  )
+# Get arguments
+$hostIPName = $args[0]
+$ethPrivateIPAddress = $args[1]
+$slbServerHost = $args[2]
+$resourceGroupName = $args[3]
+
+Write-Host $hostIPName
+Write-Host $ $ethPrivateIPAddress
+Write-Host $slbServerHost
+Write-Host $resourceGroupName
 
 # Get vThunder IP Address
-$responseIP = Get-AzPublicIpAddress -Name hostIPName -ResourceGroupName resourceGroupName | ConvertTo-Json
-$responseIP = $response | ConvertFrom-Json
-$hostIPAddress = $responseIP.IpAddress
+$response = Get-AzPublicIpAddress -Name $hostIPName -ResourceGroupName $resourceGroupName | ConvertTo-Json
+$response = $response | ConvertFrom-Json
 
-Write-Host "vThunder Host: " + $hostIPAddress
+$hostIPAddress = $response.IpAddress
+
+Write-Host $hostIPAddress
 # # Connect to Azure portal
 # Connect-AzAccount
 
@@ -142,7 +146,7 @@ function ConfigureServiceGroup {
         `n    },
         `n    {
         `n      `"name`":`"sg53`",
-        `n      `"protocol`":`"udp`"
+        `n      `"protocol`":`"udp`",
         `n      `"member-list`": [
         `n        {
         `n          `"name`":`"s1`",
@@ -152,7 +156,7 @@ function ConfigureServiceGroup {
         `n    },
         `n     {
         `n      `"name`":`"sg80`",
-        `n      `"protocol`":`"tcp`"
+        `n      `"protocol`":`"tcp`",
         `n      `"member-list`": [
         `n        {
         `n          `"name`":`"s1`",
@@ -220,9 +224,15 @@ $Response = Get-AuthToken -BaseUrl $BaseUrl
 $AuthorizationToken = $Response.authresponse.signature
 # Invoke Enable-Eth1
 ConfigureEth1 -BaseUrl $BaseUrl -AuthorizationToken $AuthorizationToken
+# wait for 5 sec
+Start-Sleep -Seconds 5
 # Invoke CreateServerS1
 ConfigureServerS1 -BaseUrl $BaseUrl -AuthorizationToken $AuthorizationToken
+# wait for 5 sec
+Start-Sleep -Seconds 5
 # Invoke ConfigureServiceGroup
 ConfigureServiceGroup -BaseUrl $BaseUrl -AuthorizationToken $AuthorizationToken
+# wait for 5 sec
+Start-Sleep -Seconds 5
 # Invoke ConfigureVirtualServer
 ConfigureVirtualServer -BaseUrl $BaseUrl -AuthorizationToken $AuthorizationToken
