@@ -15,13 +15,12 @@ Write-Host $resourceGroupName
 # Connect to Azure portal
 # Connect-AzAccount
 
-# # Get vThunder IP Address
-# $response = Get-AzPublicIpAddress -Name $hostIPName -ResourceGroupName $resourceGroupName | ConvertTo-Json
-# $response = $response | ConvertFrom-Json
+# Get vThunder IP Address
+$response = Get-AzPublicIpAddress -Name $hostIPName -ResourceGroupName $resourceGroupName | ConvertTo-Json
+$response = $response | ConvertFrom-Json
 
-# $hostIPAddress = $response.IpAddress
+$hostIPAddress = $response.IpAddress
 
-$hostIPAddress = '104.44.140.180'
 Write-Host $hostIPAddress
 
 # Base URL of AXAPIs
