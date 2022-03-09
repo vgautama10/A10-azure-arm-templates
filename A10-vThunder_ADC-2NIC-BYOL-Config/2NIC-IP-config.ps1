@@ -12,6 +12,9 @@ Write-Host $ $ethPrivateIPAddress
 Write-Host $slbServerHost
 Write-Host $resourceGroupName
 
+# Connect to Azure portal
+Connect-AzAccount
+
 # Get vThunder IP Address
 $response = Get-AzPublicIpAddress -Name $hostIPName -ResourceGroupName $resourceGroupName | ConvertTo-Json
 $response = $response | ConvertFrom-Json
@@ -19,8 +22,6 @@ $response = $response | ConvertFrom-Json
 $hostIPAddress = $response.IpAddress
 
 Write-Host $hostIPAddress
-# # Connect to Azure portal
-# Connect-AzAccount
 
 # Base URL of AXAPIs
 $BaseUrl = -join("https://", $hostIPAddress, "/axapi/v3")
